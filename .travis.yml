@@ -7,7 +7,7 @@ python:
   - "3.5-dev"
   - "nightly"
 
-script: nosetests
+script: python tests/sample_db_tests.py
 
 notifications:
   email: false
