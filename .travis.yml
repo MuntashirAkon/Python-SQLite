@@ -7,7 +7,8 @@ python:
   - "3.5-dev"
   - "nightly"
 
-services: sqlite
+env:
+  - DB=sqlite
 
 script:
   - python setup.py install
