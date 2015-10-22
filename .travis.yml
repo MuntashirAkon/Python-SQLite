@@ -9,7 +9,7 @@ python:
 
 
 script:
-  - python setup.py
+  - python setup.py install
   - python tests/sample_db_tests.py
 
 notifications:
