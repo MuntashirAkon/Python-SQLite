@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import sqlite3
 from sqlite.sqlitestmt import SQLiteStmt
-from sqlite.sqliteresult import SQLiteResult
 from sqlite.sqliteexception import SQLiteException
 
 __title__ = 'SQLite'
@@ -169,11 +168,10 @@ class SQLite(SQLiteException):
         Performs a query on the database
         :param query: SQL query
         :type query: str
-        :rtype: SQLiteResult or bool
+        :rtype: SQLiteStmt or bool
         """
         try:
-            result = SQLiteResult(self._conn, query)
-            return result
+            return self._query(query)
         except:
             self._handle_error()
             return False
