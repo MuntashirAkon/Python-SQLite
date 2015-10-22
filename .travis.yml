@@ -7,7 +7,12 @@ python:
   - "3.5-dev"
   - "nightly"
 
-script: nosetests
+env:
+  - DB=sqlite
+
+script:
+  - python setup.py install
+  - python tests/sample_db_test.py
 
 notifications:
   email: false
