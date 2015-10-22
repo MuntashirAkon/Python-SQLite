@@ -1,7 +1,8 @@
 #!/usr/bin/python3
+from sqlite.sqliteexception import SQLiteException
 
 __title__ = 'SQLiteStmt'
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 __author__ = 'Muntashir Al-Islam'
 __license__ = 'MIT'
 __copyright__ = 'Copyright (c) 2015 Muntashir Al-Islam'
@@ -12,32 +13,38 @@ __copyright__ = 'Copyright (c) 2015 Muntashir Al-Islam'
     date: 19/10/2015
 """
 
-class SQLiteStmt:
+
+class SQLiteStmt(SQLiteException):
     """
     Represents a prepared statement.
     """
-    num_rows = 0  # Return the number of rows in statements result set
     affected_rows = 0  # Returns the total number of rows changed, deleted, or inserted by the last executed statement
-    param_count = 0  # Returns the number of parameter for the given statement
-    insert_id = 0  # Get the ID generated from the previous INSERT operation
-    _params = tuple()
-    _store_result = False
-    _fetched_rows = list()
-    _temp_index = 0
-    _bind_args = tuple()
+    field_count = 0    # Get the number of fields in a result
+    insert_id = 0      # Get the ID generated from the previous INSERT operation
+    num_rows = 0       # Return the number of rows in statements result set
+    param_count = 0    # Returns the number of parameter for the given statement
+
+    _params = tuple()       # parameters from self.bind_param()
+    _store_result = False   # whether SQLiteStmt will save result or not determined by self.store_result()
+    _fetched_rows = list()  # rows fetched by cursor.fetchall()
+    _temp_index = 0         # temporary index for self.bind_result()
+    _bind_args = tuple()    # tuple arguments of self.bind_result()
 
     def __init__(self, conn, query=''):
         """
         Constructs a new SQLiteStmt object
-        :param conn: sqlite3.connect object
+        :param conn: Connect object
         :type conn: sqlite3.connect
         :param query: SQL query
         :type query: str
         :rtype: None
         """
-        self._conn = conn
-        self._query = query
-        self.param_count = query.count('?')
+        try:
+            self._conn = conn
+            self._query = query
+            self.param_count = query.count('?')
+        except:
+            self._handle_error()
 
     def prepare(self, query):
         """
@@ -93,7 +100,8 @@ class SQLiteStmt:
                 self._conn.commit()
             rows = cursor.fetchall()  # fetch all the rows
 
-            self.affected_rows = cursor.rowcount if cursor.rowcount != -1 else 0  # affected rows is either .rowcount or 0
+            # self.affected_rows is either cursor.rowcount or 0. I don't like -1.
+            self.affected_rows = cursor.rowcount if cursor.rowcount != -1 else 0
             self.num_rows = len(rows)
             if cursor.lastrowid:
                 self.insert_id = cursor.lastrowid
@@ -101,6 +109,7 @@ class SQLiteStmt:
                 self._fetched_rows = rows
             return True
         except:
+            self._handle_error()
             self._conn.rollback()
             return False
 

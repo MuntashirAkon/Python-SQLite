@@ -3,6 +3,7 @@ SQLite Database handler in Python with PHP-MySQLi like syntax
 
 ## Builds
 master: [![Build Status](https://travis-ci.org/MuntashirAkon/Python-SQLite.svg?branch=master)](https://travis-ci.org/MuntashirAkon/Python-SQLite)
+v0.1.0: [![Build Status](https://travis-ci.org/MuntashirAkon/Python-SQLite.svg?branch=v0.1.0)](https://travis-ci.org/MuntashirAkon/Python-SQLite)
 
 ## Documentation
 Full documentation is covered in the [wiki page](https://github.com/MuntashirAkon/Python-SQLite/wiki).
