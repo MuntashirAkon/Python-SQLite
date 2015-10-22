@@ -7,7 +7,13 @@ python:
   - "3.5-dev"
   - "nightly"
 
+<<<<<<< Updated upstream
 script: python tests/sample_db_tests.py
+=======
+script:
+  - python setup.py
+  - python tests/sample_db_tests.py
+>>>>>>> Stashed changes
 
 notifications:
   email: false
